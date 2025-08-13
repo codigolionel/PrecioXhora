@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculo de presupuesto de Asistencia</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <h1 class="title">
+                Calculo de presupuesto de Asistencia
+            </h1>
+            <p class="subtitle">
+                Ingresa tu tarifa por hora y calcula tus ganancias diarias, semanales y mensuales
+            </p>
+        </div>
+
+        <!-- Formulario principal -->
+        <div class="form-section">
+            <h2 class="form-title">
+                <span class="icon">💰</span>
+                Configuración de Trabajo
+            </h2>
+            
+            <div class="form-grid">
+                <!-- Tarifa por hora -->
+                <div class="input-group">
+                    <label class="label">
+                        ¿Cuánto cobras por hora?
+                    </label>
+                    <input
+                        type="number"
+                        id="hourlyRate"
+                        placeholder="Ej: 25"
+                        class="input"
+                    />
+                </div>
+
+                <!-- Horas por día -->
+                <div class="input-group">
+                    <label class="label">
+                        Horas por Día
+                    </label>
+                    <input
+                        type="number"
+                        id="hoursPerDay"
+                        value="8"
+                        min="1"
+                        max="24"
+                        class="input"
+                    />
+                </div>
+
+                <!-- Días por semana -->
+                <div class="input-group">
+                    <label class="label">
+                        Días por Semana
+                    </label>
+                    <input
+                        type="number"
+                        id="daysPerWeek"
+                        value="5"
+                        min="1"
+                        max="7"
+                        class="input"
+                    />
+                </div>
+            </div>
+        </div>
+
+        <!-- Resultados -->
+        <div class="results-grid">
+            <!-- Ganancia diaria -->
+            <div class="result-card red">
+                <div class="result-header">
+                    <span class="result-icon red">🕒</span>
+                    <h3 class="result-title">
+                        Ganancia Diaria
+                    </h3>
+                </div>
+                <div class="result-amount">
+                    <div class="amount red" id="dailyEarnings">
+                        $0.00
+                    </div>
+                    <p class="amount-description" id="dailyHours">
+                        Por 8 horas/día
+                    </p>
+                </div>
+            </div>
+
+            <!-- Ganancia semanal -->
+            <div class="result-card violet">
+                <div class="result-header">
+                    <span class="result-icon violet">📅</span>
+                    <h3 class="result-title">
+                        Ganancia Semanal
+                    </h3>
+                </div>
+                <div class="result-amount">
+                    <div class="amount violet" id="weeklyEarnings">
+                        $0.00
+                    </div>
+                    <p class="amount-description" id="weeklyHours">
+                        40 horas/semana
+                    </p>
+                </div>
+            </div>
+
+            <!-- Ganancia mensual -->
+            <div class="result-card red">
+                <div class="result-header">
+                    <span class="result-icon red">💰</span>
+                    <h3 class="result-title">
+                        Ganancia Mensual
+                    </h3>
+                </div>
+                <div class="result-amount">
+                    <div class="amount red" id="monthlyEarnings">
+                        $0.00
+                    </div>
+                    <p class="amount-description">
+                        Aproximado (4 semanas)
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Información adicional -->
+        <div class="summary-section" id="summarySection">
+            <h3 class="summary-title">
+                📊 Resumen de Ganancias
+            </h3>
+            <div class="summary-grid">
+                <div>
+                    <div class="summary-item">
+                        <span class="summary-label red">Tarifa por hora:</span> 
+                        <span id="summaryRate">$0.00</span>
+                    </div>
+                    <div class="summary-item">
+                        <span class="summary-label red">Horas por semana:</span> 
+                        <span id="summaryWeeklyHours">0 horas</span>
+                    </div>
+                </div>
+                <div>
+                    <div class="summary-item">
+                        <span class="summary-label violet">Ganancia diaria:</span> 
+                        <span id="summaryDaily">$0.00</span>
+                    </div>
+                    <div class="summary-item">
+                        <span class="summary-label violet">Ganancia semanal:</span> 
+                        <span id="summaryWeekly">$0.00</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Función para formatear números como moneda
+        function formatCurrency(amount) {
+            return parseFloat(amount).toFixed(2);
+        }
+
+        // Función para calcular y actualizar los totales
+        function calculateTotals() {
+            const hourlyRate = parseFloat(document.getElementById('hourlyRate').value) || 0;
+            const hoursPerDay = parseFloat(document.getElementById('hoursPerDay').value) || 8;
+            const daysPerWeek = parseFloat(document.getElementById('daysPerWeek').value) || 5;
+
+            const hoursPerWeek = hoursPerDay * daysPerWeek;
+            const dailyEarnings = hourlyRate * hoursPerDay;
+            const weeklyEarnings = hourlyRate * hoursPerWeek;
+            const monthlyEarnings = weeklyEarnings * 4; // Aproximado a 4 semanas
+
+            // Actualizar elementos del DOM
+            document.getElementById('dailyEarnings').textContent = '$' + formatCurrency(dailyEarnings);
+            document.getElementById('weeklyEarnings').textContent = '$' + formatCurrency(weeklyEarnings);
+            document.getElementById('monthlyEarnings').textContent = '$' + formatCurrency(monthlyEarnings);
+            
+            document.getElementById('dailyHours').textContent = `Por ${hoursPerDay} horas/día`;
+            document.getElementById('weeklyHours').textContent = `${hoursPerWeek} horas/semana`;
+
+            // Actualizar resumen
+            document.getElementById('summaryRate').textContent = '$' + formatCurrency(hourlyRate);
+            document.getElementById('summaryWeeklyHours').textContent = hoursPerWeek + ' horas';
+            document.getElementById('summaryDaily').textContent = '$' + formatCurrency(dailyEarnings);
+            document.getElementById('summaryWeekly').textContent = '$' + formatCurrency(weeklyEarnings);
+
+            // Mostrar/ocultar sección de resumen
+            const summarySection = document.getElementById('summarySection');
+            if (hourlyRate > 0) {
+                summarySection.style.display = 'block';
+            } else {
+                summarySection.style.display = 'none';
+            }
+        }
+
+        // Agregar event listeners a todos los inputs
+        document.getElementById('hourlyRate').addEventListener('input', calculateTotals);
+        document.getElementById('hoursPerDay').addEventListener('input', calculateTotals);
+        document.getElementById('daysPerWeek').addEventListener('input', calculateTotals);
+
+        // Calcular valores iniciales
+        calculateTotals();
+
+        
+    </script>
+</body>
+</html>
